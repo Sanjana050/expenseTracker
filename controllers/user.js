@@ -157,37 +157,33 @@ res.status(400).json({message:'error occured',err:err})
 
   }
 
-  exports.postTransactionStatus=(req,res,next)=>{
+  exports.postTransactionStatus= async (req,res,next)=>{
     try{
       const {payment_id,order_id}=req.body;
-
+      
       console.log(req.body,'---->this is req.body from user.js post Tranx')
-      Order.findOne({where:{orderId:order_id}}).then((order)=>{
-        console.log('2.this is after finding the particular oder')
+      const order=await Order.findOne({where:{orderId:order_id}})
+    
+       
+     const promise1=  order.update({paymentId:payment_id,status:"Successful"});
 
-        order.update({paymentId:payment_id,status:"Successful"}).then(()=>{
-          req.user.update({isPremiumUser:true}).then(()=>{
-            console.log('this is just before sending response')
-            res.status(200).json({success:"true",message:"transaction status updated"});
-          })
-        }).catch((err)=>{
-
-          req.user.update({isPremiumUser:false}).then(()=>{
-          console.log(err);
-          res.status(401).json({err:err});
-          })
+         const promise2=  req.user.update({isPremiumUser:true});
+Promise.all([promise1,promise2]).then(()=>{
+  res.status(200).json({success:"true",message:"transaction status updated"});
+}).catch((err)=>{
+  console.log(err);
+  res.json({message:'error occured',err:err})
+})
+            
+         
           
-        })
-      }).catch((err)=>{
-        console.log(err);
-        res.json({err:err})
-      })
+        
 
     }
     catch(err)
     {
       console.log(err);
-      res.status(500).json({message:'internal server error'})
+      res.status(401).json({message:'something went wrong',err:err})
     }
   }
 
