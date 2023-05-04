@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        background: url('https://img.freepik.com/premium-vector/new-indian-currency-bank-notes-2000-500-200-10050-20-10-forming-currency-background_562076-87.jpg?size=626&ext=jpg&ga=GA1.2.1554987159.1680416334&semt=robertav1_2_sidr');
+        
+        background-repeat: no-repeat;}
+    .heading{
+    
+        display: flex;
+        justify-content: center;
+
+    }
+    .premium{
+        display:flex;
+        justify-content: center;
+        background-color: rgb(0,0,0,0.1);
+        color:black;
+        font-weight: 600;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body{
+        background: url('https://img.freepik.com/premium-vector/new-indian-currency-bank-notes-2000-500-200-10050-20-10-forming-currency-background_562076-87.jpg?size=626&ext=jpg&ga=GA1.2.1554987159.1680416334&semt=robertav1_2_sidr');
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-repeat: no-repeat;
+        }
+
+        .signupform{
+            display: flex;
+            
+            justify-content: center;
+        position: relative;
+        margin-top:10rem;
+        display: grid;
+      grid-template-rows: repeat(3,2fr);
+      gap: 20px;
+      justify-content: center;
+      
+      align-items: center;
+
+        }
+        .form-content{
+            
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom:20px;
+            
+            
+        }
+        input{
+            padding:.2rem;
+            border-radius:.5rem;
+            border:1px solid rgb(9, 9, 9);
+            width:15rem;
+        
+        }
+        label{
+            padding:3rem;
+
+        }
+        .pass{
+            position:relative;
+            margin-right:-20px;
+        }
+
+        .btn{
+            position:relative;
+            margin-left:12rem;
+            padding:.5rem;
+            background: black;
+            color:white;
+            border-radius:.5rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            cursor: pointer;
+            width:5rem;
+            
+        }
+           .signup-user{
+            position:absolute;
+            margin-bottom:15rem;
+            margin-left:25rem;
+            align-items:center;
+            display:grid;
+            grid-template-rows: repeat(2,1fr);
+           }
+           .signup-user{
+            position:relative;
+            margin-left:26.5rem;
+
+           }
+           .signup-user>p{
+            display: flex;
+            margin-left:12rem
+           }
+           main{
+            position: relative;
+            margin-top:-12rem;
+           }
+          
+
+</style>
+<body>
+    <header>
+        <div class="heading">
+            <h2>Track your expense</h2>
+        </div>
+        <div class="premium">
+            <button class="premium" id="premium-btn" style="border:none ;background-color:rgb(0,0,0,0)">Buy premium membership</button>
+        </div>
+
+        
+        <form class="signup-user" action="/getsignup" method="GET">
+            <p>new user?</p>
+            <button type="submit" class="btn">Sign-Up</button>
+        </form>
+
+    </header>
+
+
+    <main>
+        <div class="signupform">
+
+
+
+
+            <form class="formcontrol">
+
+               
+
+                <div class="form-content">
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" id="email" required>
+                </div>
+
+                <div class="form-content">
+                    <label  class="pass" for="password">Password:</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+
+               
+
+                <div class="form-content">
+                   <button type="submit" class="btn login">Login</button>
+                </div>
+
+                
+            </form>
+        <p id="message"></p>
+        <p id="message1"></p>
+        </div>
+
+    </main>
+    
+
+<script src="login.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</body>
+</html>

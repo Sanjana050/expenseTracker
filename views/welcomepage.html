@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        background: url('https://img.freepik.com/free-vector/indian-rupee-coins-falling-background_23-2147998742.jpg?size=626&ext=jpg&ga=GA1.2.1554987159.1680416334&semt=robertav1_2_sidr');
+        background-repeat: no-repeat;
+        background-size:cover;
+        
+    }
+    .heading{
+        color:black;
+        display: flex;
+        margin: auto;
+        justify-content: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+
+    }
+    .user{
+        color:black;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+    }
+    main{
+        display: flex;
+    }
+   
+    .signup{
+        margin-left:20rem;
+    }
+
+.login{
+    position:relative;
+    margin-left:55rem
+}
+.form-content.login{
+    display: flex;
+  flex-direction: column;
+  justify-content: center; 
+}
+
+.form-control{
+    margin:auto;
+        position:absolute;
+    display:grid;
+    grid-template-rows: 1fr 1fr;;
+}
+
+
+.btn{
+    padding:.5rem;
+    background:rgba(255, 255, 255, 0.1); 
+    color:black;
+    border:1px solid black;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    cursor:pointer;
+    
+
+}
+</style>
+<body>
+<header>
+    <div class="heading">
+        <h1>Track Your Expense</h1>
+    </div>
+</header>
+<main>
+
+
+   
+
+
+    <form class="form-control" action="/getlogin"  method="GET">
+        <div class="form-content login">
+            <p class="user">Existing User</p>
+            <button type="submit" class="btn">Login</button>
+            </div>
+    </form>
+
+    <form class="form-control" action="/getsignup"  method="GET">
+        <div class="form-content signup">
+<p class="user">New user</p>
+<button type="submit" class="btn">Sign-up</button>
+</div>
+    </form>
+</main>
+
+    
+</body>
+</html>
