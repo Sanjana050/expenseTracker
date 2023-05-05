@@ -123,30 +123,70 @@
             margin-left: 25rem;
            }
           .expense{
-            margin-left: 8rem;
+            margin-left: 0;
             width:9rem;
+            margin-right:-64px;
+            padding:.2rem;
            
           }
+          .leaders{
+            background-color: rgb(189, 252, 95);
+            
+            width:10%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color:white;
+            border-radius:.5rem;
+            border:2px solid black;
+            text-align: center;
+            margin-left:40px;
+            position: sticky;
+
+          }
+          
+          .premium_users li{
+list-style: none;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+font-size: small;
+background-color: rgb(245, 190, 169);
+width:25%;
+padding:.2rem;
+margin:.2rem;
+display:grid;
+grid-template-columns:37px 83px 110px 5px;
+gap:5px;
+position: sticky;
+
+
+          }
+          .name,.expense{
+            color:white;
+            align-items: center;
+        
+          }
+
+          .username{
+    
+            padding-right:10px
+          }
+       
 
 .expenselist 
 {
 display: flex;
 flex-direction:column;
 
-
+border: 1px white solid;
 position: absolute;
   top: 50%;
   margin-top: 10px;
- margin-left:-18rem;
+ margin-left:-8rem;
  
-
-
-
-  
-  
 }
 
+nav{
 
+margin-top:25rem;
+}
    
 
 
@@ -157,7 +197,16 @@ top:0;
 }
 
 
-
+.premiumleaderbtn{
+    background-color: rgb(48, 183, 11);
+    margin-left:0;
+    padding:.2rem;
+    display: flex;
+    width:10%;
+    align-items: center;
+    
+    
+}
 
 
 </style>
@@ -169,13 +218,21 @@ top:0;
         </div>
         <div class="premium">
             <button class="premium" id="premium-btn" style="border:none ;background-color:rgb(0,0,0,0)">Buy premium membership</button>
+           
         </div>
-
         
+        <div class="premium">
+           <div id="message"></div>
+           
+        </div>
+        
+       
         <form class="signup-user" action="/getsignup" method="GET">
             <p>new user?</p>
             <button type="submit" class="btn">Sign-Up</button>
         </form>
+   
+    
 
     </header>
     <div class="container">
@@ -215,6 +272,7 @@ top:0;
        
            
             <ul class="expenselist"></ul> 
+           
        
    
 </div>
@@ -228,7 +286,13 @@ top:0;
    
    <nav> 
     
-  
+    
+    <button type="submit" class="btn premiumleaderbtn">Show Leaderboard</button>
+    <p class="leaders" style="visibility:hidden">Leaderboard</p>
+        <ul class="premium_users" style="visibility:hidden"> </ul>
+       
+    
+   
 </nav>
     
 

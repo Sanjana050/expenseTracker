@@ -62,4 +62,3 @@ link.appendChild(document.createTextNode('Login'));
 }
 }
 document.querySelector('.formcontrol').addEventListener('submit',signup);
-document.querySelector('#premium-btn').addEventListener('click',premium)

@@ -1,9 +1,11 @@
 
+
 const expenselist=document.querySelector('.expenselist')
 const expenseform=document.querySelector('.expense-form')
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get('token');
 
+let status1="";
 
 async function expense(e){
 
@@ -69,6 +71,27 @@ catch(err)
 }
 
 
+
+
+
+
+
+
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}         
+
+
+
+
+
+
 async function deleteElement(id,button)
 {
     try{
@@ -93,27 +116,33 @@ async function deleteElement(id,button)
 
 
 }
-
-
-
-
-
-
-
-
 async function loadexpense() {
     try {
       
         console.log(token)
+        
+       
+        let res=await  axios.get('http://localhost:80/postlogintoken',{headers:{"token":token}})
+
+        console.log(res,"response is axis");
+          if(res.data.isPremiumUser===true){
+          console.log(res,"res");
+           document.querySelector('#premium-btn').style.visibility="hidden";
+           document.querySelector('#message').innerHTML="you are a premium user now"
+          }
+
+
+
+       const signUpId=localStorage.getItem('signupId')
+       const decodedToken=parseJwt(signUpId);
+       
+       
+
       const response = await axios.get('http://localhost:80/getAllExpense',{headers:{"token":token}});
       if (response.status === 200) {
         expenselist.innerHTML = '';
         const expenses = response.data.expense;
 
-        
-
-        
-        
         for (let expense of expenses) {
           const amount = expense.amount;
           const description = expense.description;
@@ -137,6 +166,8 @@ async function loadexpense() {
           expenselist.appendChild(div);
   
           button.addEventListener('click', (e) => deleteElement(id, e));
+          
+         
         }
       } else {
         const div = document.createElement('div');
@@ -150,17 +181,16 @@ async function loadexpense() {
     } catch (err) {
       console.log(err);
     }
+
   }
   
-
-
   async function premium(e){
     try{
 
         const token=localStorage.getItem('signupId');
         console.log('from local storage',token)
         let response=await axios.get('http://localhost:80/postpremium',{headers:{"token":token}})
-        console.log(response,"from postpremium");
+        console.log(response,"from postpremium",response.data.userId);
         var options={
             "key":response.data.key_id,
             "orderId":response.data.order.id,
@@ -170,28 +200,41 @@ async function loadexpense() {
                     payment_id:response.razorpay_payment_id,
             },{headers:{"token":token}})
             alert('you are a premium user now')
-        }
-    
+            console.log('preimum user')
+            document.querySelector('#premium-btn').style.visibility="hidden";
+            document.querySelector('#message').innerHTML="you are a premium user now"
+
+
+           
             
-                }
+       
+     
+     }
+    }
+                console.log("after var options",options.handler)
                 const rzp1= new Razorpay(options);
                 rzp1.open();
                 e.preventDefault();
 
-          const failed=   await   rzp1.on('payment failed',function(response){
-                    console.log(response)
+          const failed=   await   rzp1.on('payment failed', async function(response){
+            
+            console.log(response);
+            try{
+              status1="failed";
+await axios.post('http://localhost:80/postFailedStatus',{ order_id:options.orderId,
+payment_id:response.razorpay_payment_id,
+
+},{headers:{"token":token}})
+            }
+            catch(err)
+            {
+console.log(err)
+            }
+                   
+                   
                 })
-if(!failed)
-{
-  document.querySelector('#premium-btn').parentElement.remove();
-}
-            
-                
-
-
-            
-        
-    
+         
+              
     }
     catch(err)
     {
@@ -199,12 +242,34 @@ if(!failed)
     }
 }
 
+async function loadleaders(){
+
+  document.querySelector('.premiumleaderbtn').style.visibility="hidden";
+  document.querySelector('.leaders').style.visibility="visible";
+  console.log("in leaderborad button")
+const token=localStorage.getItem("signUpId");
+const leaderBoardArray=await axios.get('http://localhost:80/showLeaderBoard',{headers:{"token":token}});
+console.log('after leader board btn')
+console.log(leaderBoardArray);
+var leaderBoardElem=document.querySelector('.premium_users');
+leaderBoardArray.data.forEach((user)=>{
+  const expense = user.totalExpense !== undefined ? user.totalExpense : 0;
+    leaderBoardElem.innerHTML += `<li><span class="name">Name:</span><span class="username">${user.name}</span><span class="expense">total_expense:</span><span class="expenseamount">${expense}</span></li>`;
+  
+  
+})
+document.querySelector('.premium_users').style.visibility="visible"
+
+}
+
+
+
+
+
+
 document.querySelector('#premium-btn').addEventListener('click',premium);
-
-
-document.addEventListener("DOMContentLoaded",loadexpense);
-
-expenseform.addEventListener('submit',expense)
-
+window.addEventListener("DOMContentLoaded",loadexpense);
+expenseform.addEventListener('submit',expense);
+document.querySelector('.premiumleaderbtn').addEventListener('click',loadleaders)
 
 

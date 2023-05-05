@@ -15,8 +15,10 @@ router.post('/postlogin',userController.postLogin);
 
 router.get('/postpremium',authenticate.authenticate,userController.postPremiumMembership);
 router.post('/updatetransactionstatus',authenticate.authenticate,userController.postTransactionStatus)
+router.post('/postFailedStatus',userController.postFailedStatus)
+router.get('/postlogintoken',authenticate.authenticate,userController.postLoginToken)
 router.get('/',(req,res,next)=>{
-    res.sendFile(path.join(__dirname,'../','views','welcomepage.html'));
+res.sendFile(path.join(__dirname,'../','views','welcomepage.html'));
 })
 
 module.exports=router;

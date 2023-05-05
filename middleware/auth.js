@@ -19,6 +19,11 @@ console.log('user>>>',user.userId,'NEHA');
 User.findByPk(user.userId).then((user)=>{
     console.log(JSON.stringify(user));
     req.user=user;
+    console.log("NEHA")
+    console.log(user)
+    console.log("NEHA")
+    console.log(req.user.dataValues.isPremiumUser,"premiumUser from Data")
+    console.log(req.user.dataValues.email,"email now")
      next();
 }).catch((err)=>{
     throw new Error(err)

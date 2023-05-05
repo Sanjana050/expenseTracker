@@ -9,7 +9,11 @@ app.use(bodyParser.urlencoded({extended:false}));
  app.use(express.json());
 
 const path=require('path')
-app.use(cors());
+
+app.use(cors({
+    origin: ['https://razorpay.com', 'http://localhost:80']
+  }));
+  
 
 const Sequelize=require('sequelize');
 const sequelize=require('./util/database')
@@ -19,11 +23,19 @@ const Expense=require('./models/expense');
 
 const expenseRoute=require('./router/expense');
 const userRoute=require('./router/user');
+const premiumRoute=require('./router/premium')
+
 
 app.use(express.static(path.join(__dirname,'views')))
 
+
+app.use(premiumRoute);
 app.use(expenseRoute);
 app.use(userRoute);
+
+
+
+
 
 User.hasMany(Expense);
 Expense.belongsTo(User);

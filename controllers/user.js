@@ -11,8 +11,8 @@ const  Order=require('../models/orders')
 
 const secret ='securityKey';
 
-function generateAccessKeytoken(id){
-return jwt.sign({userId:id},'securityKey')
+function generateAccessKeytoken(id,isPremiumUser){
+return jwt.sign({userId:id,isPremiumUser},'securityKey')
 }
 
 exports.getSignUp=(req,res,next)=>{
@@ -68,7 +68,14 @@ try{
   };
   
 
+exports.postLoginToken=(req,res,next)=>{
+ const user=req.user;
+ 
+ console.log(req.user.isPremiumUser,"from exports .post loginToken");
+ res.json({"isPremiumUser":req.user.isPremiumUser});
 
+
+}
 
   exports.postLogin = (req, res, next) => {
     console.log('hi')
@@ -90,7 +97,7 @@ try{
             } else {
               
                
-                res.status(200).json({ message: "Login successful",userId:generateAccessKeytoken(user.id)});
+                res.status(200).json({ message: "Login successful",userId:generateAccessKeytoken(user.id,user.isPremiumUser)});
               
             }
           });
@@ -143,7 +150,7 @@ rzp.orders.create({amount ,currency:'INR'},(err,order)=>{
     console.log("ORDERS",order,"order")
   }
   req.user.createOrder({orderId:order.id,status:'PENDING'}).then(()=>{
-    return res.status(200).json({order,key_id:rzp.key_id})
+    return res.status(200).json({order,key_id:rzp.key_id,userId})
   }).catch((err)=>{
     console.log('before error 3')
     throw new Error(json.stringify(err))
@@ -183,8 +190,36 @@ Promise.all([promise1,promise2]).then(()=>{
     catch(err)
     {
       console.log(err);
+      await postFailedStatus(req.body.payment_id, req.body.order_id);
       res.status(401).json({message:'something went wrong',err:err})
     }
+  }
+
+
+  exports.postFailedStatus=async (req,res,next)=>{
+try{
+const {payment_id,order_id}=req.body;
+console.log('this is from post payment status failed');
+const order=await Order.findByPk(order_id);
+if(!order)
+{
+  console.log(order);
+  return res.status(400).json({message:"order not found"})
+}
+const updatedOrder=await order.update({
+  paymentId:payment_id,
+  status:"Failed"
+  
+
+})
+res.status(200).json({ success: true, message: "transaction status updated" });
+
+}
+catch{
+  console.log(err);
+    res.status(401).json({ message: 'something went wrong', err: err })
+
+}
   }
 
 
