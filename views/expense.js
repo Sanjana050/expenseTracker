@@ -249,12 +249,18 @@ async function loadleaders(){
   console.log("in leaderborad button")
 const token=localStorage.getItem("signUpId");
 const leaderBoardArray=await axios.get('http://localhost:80/showLeaderBoard',{headers:{"token":token}});
-console.log('after leader board btn')
-console.log(leaderBoardArray);
+
+
 var leaderBoardElem=document.querySelector('.premium_users');
-leaderBoardArray.data.forEach((user)=>{
-  const expense = user.totalExpense !== undefined ? user.totalExpense : 0;
-    leaderBoardElem.innerHTML += `<li><span class="name">Name:</span><span class="username">${user.name}</span><span class="expense">total_expense:</span><span class="expenseamount">${expense}</span></li>`;
+
+leaderBoardArray.data.forEach((element)=>{
+  
+  const id = element.id;
+  const name=element.name;
+  const totalExpense=element.totalExpense;
+  
+  const expense = totalExpense !== null ? totalExpense : 0;
+    leaderBoardElem.innerHTML += `<li><span class="name">Name:</span><span class="username">${name}</span><span class="expense">total_expense:</span><span class="expenseamount">${expense}</span></li>`;
   
   
 })
