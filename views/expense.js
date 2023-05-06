@@ -43,6 +43,8 @@ div.appendChild(button);
 expenselist.appendChild(div);
 
 button.addEventListener('click', (event)=>deleteElement(response.data.id,event));
+loadexpense();
+
 }
 else{
     const div=document.createElement('div');
@@ -52,7 +54,7 @@ else{
     div.style.width="50rem";
     div.style.padding="2rem";
     expenselist.appendChild(div);
-    
+    console.log('expense failed')
     
     }
 
@@ -67,6 +69,7 @@ else{
 catch(err)
 {
     console.log(err)
+    console.log('error')
 }
 }
 
@@ -142,13 +145,14 @@ async function loadexpense() {
       if (response.status === 200) {
         expenselist.innerHTML = '';
         const expenses = response.data.expense;
-
+console.log('in rxpense for xhecking')
+console.log(expenses)
         for (let expense of expenses) {
           const amount = expense.amount;
           const description = expense.description;
           const category = expense.category;
           const id = expense.id;
-  
+  console.log('after id')
           const div = document.createElement('div');
           div.id = `expense-${id}`;
           div.appendChild(document.createTextNode(`amount: ${amount} description: ${description} category: ${category}`));
@@ -203,7 +207,7 @@ async function loadexpense() {
             console.log('preimum user')
             document.querySelector('#premium-btn').style.visibility="hidden";
             document.querySelector('#message').innerHTML="you are a premium user now"
-
+document.querySelector('.premiumleaderbtn').style.visibility="visible"
 
            
             

@@ -19,18 +19,18 @@ console.log('before leaderboard')
 // });
 
 const leaderBoardArray = await User.findAll({
-    attributes: [
-      'id',
-      'name',
-      [sequelize.fn('SUM', sequelize.col('expenses.amount')), 'totalExpense']
-    ],
-    include: [
-      {
-        model: Expense,
-        attributes: []
-      }
-    ],
-    group: ['User.id'],
+    // attributes: [
+    //   'id',
+    //   'name',
+    //   [sequelize.fn('SUM', sequelize.col('expenses.amount')), 'totalExpense']
+    // ],
+    // include: [
+    //   {
+    //     model: Expense,
+    //     attributes: []
+    //   }
+    // ],
+    // group: ['User.id'],
     order: [['totalExpense', 'DESC']]
   });
   
