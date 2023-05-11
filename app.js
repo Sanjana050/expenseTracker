@@ -24,7 +24,8 @@ const Expense=require('./models/expense');
 const expenseRoute=require('./router/expense');
 const userRoute=require('./router/user');
 const premiumRoute=require('./router/premium')
-const forgotPassRouter=require('./router/password')
+const forgotPassRouter=require('./router/password');
+const { forgotpassword } = require('./controllers/password');
 
 app.use(express.static(path.join(__dirname,'views')))
 

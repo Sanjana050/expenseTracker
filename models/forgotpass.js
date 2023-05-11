@@ -7,12 +7,11 @@ const ForgotPassword=sequelize.define('forgotpass',{
         primaryKey:true
     },
     active:Sequelize.BOOLEAN,
-    expiresBy:Sequelize.DATE,
-    // userId: {
-    //     type: Sequelize.INTEGER,
-    //     allowNull: false,
-    //     defaultValue: 0 // Set the default value to 0 or any other value you prefer
-    //   }
+    userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0 // Set the default value to 0 or any other value you prefer
+      }
   
 })
 
