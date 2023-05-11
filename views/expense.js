@@ -20,7 +20,7 @@ const category=document.querySelector('#category').value;
 
 
 
-const response=await axios.post('http://localhost:80/postexpense',{amount,description,category},{headers:{"token":token}});
+const response=await axios.post('http://localhost:3000/postexpense',{amount,description,category},{headers:{"token":token}});
 if(response.status===200)
 {
 const div=document.createElement('div');
@@ -44,6 +44,7 @@ expenselist.appendChild(div);
 
 button.addEventListener('click', (event)=>deleteElement(response.data.id,event));
 loadexpense();
+
 
 }
 else{
@@ -99,11 +100,12 @@ async function deleteElement(id,button)
 {
     try{
 
-        
+      console.log("Hey babay")
     const div=button.target.parentElement;
     
-
-    const response=await axios.delete(`/deleteExpense/${id}`)
+    console.log(id,"neha id");
+console.log(id);
+    const response=await axios.post(`http://localhost:3000/deleteExpense`,{expenseId:id},{headers:{"token":token}})
     if(response.status===200)
     {
        
@@ -125,13 +127,17 @@ async function loadexpense() {
         console.log(token)
         
        
-        let res=await  axios.get('http://localhost:80/postlogintoken',{headers:{"token":token}})
+        let res=await  axios.get('http://localhost:3000/postlogintoken',{headers:{"token":token}})
 
         console.log(res,"response is axis");
-          if(res.data.isPremiumUser===true){
+        const check=res.data.isPremiumUser
+          if(check){
+
           console.log(res,"res");
            document.querySelector('#premium-btn').style.visibility="hidden";
            document.querySelector('#message').innerHTML="you are a premium user now"
+           document.querySelector('.premiumleaderbtn').style.visibility="visible"
+           console.log("hii")
           }
 
 
@@ -141,18 +147,17 @@ async function loadexpense() {
        
        
 
-      const response = await axios.get('http://localhost:80/getAllExpense',{headers:{"token":token}});
+      const response = await axios.get('http://localhost:3000/getAllExpense',{headers:{"token":token}});
       if (response.status === 200) {
         expenselist.innerHTML = '';
         const expenses = response.data.expense;
 console.log('in rxpense for xhecking')
-console.log(expenses)
         for (let expense of expenses) {
           const amount = expense.amount;
           const description = expense.description;
           const category = expense.category;
           const id = expense.id;
-  console.log('after id')
+  
           const div = document.createElement('div');
           div.id = `expense-${id}`;
           div.appendChild(document.createTextNode(`amount: ${amount} description: ${description} category: ${category}`));
@@ -170,6 +175,8 @@ console.log(expenses)
           expenselist.appendChild(div);
   
           button.addEventListener('click', (e) => deleteElement(id, e));
+
+          
           
          
         }
@@ -193,13 +200,13 @@ console.log(expenses)
 
         const token=localStorage.getItem('signupId');
         console.log('from local storage',token)
-        let response=await axios.get('http://localhost:80/postpremium',{headers:{"token":token}})
+        let response=await axios.get('http://localhost:3000/postpremium',{headers:{"token":token}})
         console.log(response,"from postpremium",response.data.userId);
         var options={
             "key":response.data.key_id,
             "orderId":response.data.order.id,
             "handler":async function(response){
-                await axios.post('http://localhost:80/updatetransactionstatus',{
+                await axios.post('http://localhost:3000/updatetransactionstatus',{
                     order_id:options.orderId,
                     payment_id:response.razorpay_payment_id,
             },{headers:{"token":token}})
@@ -207,7 +214,7 @@ console.log(expenses)
             console.log('preimum user')
             document.querySelector('#premium-btn').style.visibility="hidden";
             document.querySelector('#message').innerHTML="you are a premium user now"
-document.querySelector('.premiumleaderbtn').style.visibility="visible"
+
 
            
             
@@ -225,7 +232,7 @@ document.querySelector('.premiumleaderbtn').style.visibility="visible"
             console.log(response);
             try{
               status1="failed";
-await axios.post('http://localhost:80/postFailedStatus',{ order_id:options.orderId,
+await axios.post('http://localhost:3000/postFailedStatus',{ order_id:options.orderId,
 payment_id:response.razorpay_payment_id,
 
 },{headers:{"token":token}})
@@ -252,7 +259,7 @@ async function loadleaders(){
   document.querySelector('.leaders').style.visibility="visible";
   console.log("in leaderborad button")
 const token=localStorage.getItem("signUpId");
-const leaderBoardArray=await axios.get('http://localhost:80/showLeaderBoard',{headers:{"token":token}});
+const leaderBoardArray=await axios.get('http://localhost:3000/showLeaderBoard',{headers:{"token":token}});
 
 
 var leaderBoardElem=document.querySelector('.premium_users');
@@ -279,6 +286,8 @@ document.querySelector('.premium_users').style.visibility="visible"
 
 document.querySelector('#premium-btn').addEventListener('click',premium);
 window.addEventListener("DOMContentLoaded",loadexpense);
+
+
 expenseform.addEventListener('submit',expense);
 document.querySelector('.premiumleaderbtn').addEventListener('click',loadleaders)
 

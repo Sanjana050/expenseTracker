@@ -16,7 +16,7 @@ async function signup(e){
 
 
         
-        const response=await axios.post('http://localhost:80/postsignup', 
+        const response=await axios.post('http://localhost:3000/postsignup', 
             {name,email,password,phone});
 
     

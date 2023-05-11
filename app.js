@@ -3,7 +3,7 @@ const app=express();
 const axios = require('axios');
 const cors = require('cors');
 const Order=require('./models/orders')
-
+const Forgotpass=require('./models/forgotpass')
 const bodyParser=require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
  app.use(express.json());
@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 const path=require('path')
 
 app.use(cors({
-    origin: ['https://razorpay.com', 'http://localhost:80']
+    origin: ['https://razorpay.com', 'http://localhost:3000','https://nodemailer.com/about/']
   }));
   
 
@@ -24,14 +24,15 @@ const Expense=require('./models/expense');
 const expenseRoute=require('./router/expense');
 const userRoute=require('./router/user');
 const premiumRoute=require('./router/premium')
-
+const forgotPassRouter=require('./router/password')
 
 app.use(express.static(path.join(__dirname,'views')))
 
-
+app.use(forgotPassRouter);
 app.use(premiumRoute);
 app.use(expenseRoute);
 app.use(userRoute);
+
 
 
 
@@ -44,9 +45,14 @@ Expense.belongsTo(User);
 User.hasMany(Order);
 Order.belongsTo(User);
 
+
+User.hasMany(Forgotpass);
+Forgotpass.belongsTo(User);
+
+
 sequelize.sync().then((result)=>{
     console.log(result);
-    app.listen(80);
+    app.listen(3000);
 }).catch((err)=>{
     console.log(err)
 })

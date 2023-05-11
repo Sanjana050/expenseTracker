@@ -104,7 +104,15 @@
             margin-top:-12rem;
            }
           
+#forgotpassbtn{
+    width:30%;
+    margin-left:11rem;
+    position:relative;
+    text-align: center;
+    background-color: transparent;
+    color: black;
 
+}
 </style>
 <body>
     <header>
@@ -149,6 +157,14 @@
                 </div>
 
                 
+               
+
+            </form>
+            <button type="submit" class="btn" id="forgotpassbtn">Forgot Password</button>
+            <form class="forgot_pass" style="visibility: hidden;">
+<label for="emailf">Enter your email id</label>
+<input type="email" class="emailf" id="emailf" name="emailf">
+<button type="submit" class="btn emailfbtn">Send Email</button>
             </form>
         <p id="message"></p>
         <p id="message1"></p>

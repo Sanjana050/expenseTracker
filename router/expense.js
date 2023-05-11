@@ -11,5 +11,5 @@ router.get('/getexpense',authenticate.authenticate,expenseController.getExpense)
 router.get('/getAllExpense',expenseController.getAllExpense)
 
 router.post('/postexpense',authenticate.authenticate,expenseController.postExpense);
-router.delete('/deleteExpense/:id',expenseController.deleteExpense)
+router.post('/deleteExpense',authenticate.authenticate,expenseController.deleteExpense)
 module.exports=router;

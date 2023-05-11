@@ -137,10 +137,15 @@ exports.getAllExpense=(req,res,next)=>{
 }
 
 exports.deleteExpense=async(req,res,next)=>{
+    console.log("USER",req.user.id,req.expenseId)
+    const id=req.expenseId;
     const t=await sequelize.transaction();
-    const id=req.params.id;
+   
     Expense.findByPk(id).then(async(expense)=>{
+        console.log("HII REQ@ ",expense)
+
         const totalExpense=req.user.totalExpense-expense.amount;
+        console.log(totalExpense);
         User.update({totalExpense:totalExpense},{where:{id:req.user.id}},{transaction:t}).then(async()=>{
            await expense.destroy();
            await t.commit();

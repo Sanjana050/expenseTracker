@@ -4,6 +4,9 @@
     const urlParams = new URLSearchParams(window.location.search);
     const message = urlParams.get('message');
     
+    
+
+
     // display the message on the page
     const messageElement = document.getElementById('message');
     if (message) {
@@ -23,7 +26,7 @@ async function login(e)
     const password=document.querySelector('#password').value;
     
 
-    const response= await axios.post('http://localhost:80/postlogin',{email,password}
+    const response= await axios.post('http://localhost:3000/postlogin',{email,password}
     );
     
 
@@ -64,10 +67,41 @@ link.appendChild(document.createTextNode('Signup'));
     }
 }
 
+async function forgotemail(e){
+    try{
+e.preventDefault();
+        const email_id=document.querySelector('#emailf').value;
+        console.log(email_id);
+const forgotEmail=await axios.post('http://localhost:3000/forgotPassword',{email_id})
+if(forgotEmail.status==200)
+{
+    document.body.innerHTML += '<div style="color:green;">Mail Successfuly sent <div>'
+} else {
+    throw new Error('Something went wrong!!!')
+}
+    }
+    catch(err) {
+        
+document.body.innerHTML += `<div style="color:red;">${err} <div>`;
+
+}
+
+}
+
+
+
+
+document.querySelector('#forgotpassbtn').addEventListener('click',()=>{
+    document.querySelector('#forgotpassbtn').style.visibility="hidden"
+    document.querySelector('.forgot_pass').style.visibility="visible"
+})
+
 document.querySelector('.formcontrol').addEventListener('submit',login)
 
-
-
+document.querySelector('.emailfbtn').addEventListener('click',
+    forgotemail
+  );
+  
 
 
 
