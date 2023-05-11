@@ -214,7 +214,7 @@ console.log('in rxpense for xhecking')
             console.log('preimum user')
             document.querySelector('#premium-btn').style.visibility="hidden";
             document.querySelector('#message').innerHTML="you are a premium user now"
-
+document.getElementById('downloadexpense').style.display="visible"
 
            
             
@@ -279,7 +279,29 @@ document.querySelector('.premium_users').style.visibility="visible"
 
 }
 
+async function downloadexpense(){
+try{
+const response=await axios.get('http://localhost:3000/downloadexpense',{headers:{"token":token}});
+if(response.status===200)
+{
+var a=document.createElement('a');
+a.href=response.data.fileUrl;
+a.download= 'myexpense.csv';
+a.click();
+}
+else
+{
+  console.log('could not download the file');
+  throw new Error();
+}
+}
+catch(err)
+{
 
+  console.log("getting error in downloadexpense",err);
+}
+
+}
 
 
 
@@ -292,3 +314,5 @@ expenseform.addEventListener('submit',expense);
 document.querySelector('.premiumleaderbtn').addEventListener('click',loadleaders)
 
 
+const downloadbtn=document.querySelector('#downloadExpense');
+downloadbtn.addEventListener('click',downloadexpense);
