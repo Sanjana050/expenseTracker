@@ -214,7 +214,9 @@ console.log('in rxpense for xhecking')
             console.log('preimum user')
             document.querySelector('#premium-btn').style.visibility="hidden";
             document.querySelector('#message').innerHTML="you are a premium user now"
-document.getElementById('downloadexpense').style.display="visible"
+// document.getElementById('downloadExpense').style.visibility="visible"
+document.getElementById('downloadExpense').style.display = "block";
+
 
            
             
@@ -278,30 +280,39 @@ leaderBoardArray.data.forEach((element)=>{
 document.querySelector('.premium_users').style.visibility="visible"
 
 }
+ function downloadexpense(){
+  
+      axios.get('http://localhost:3000/downloadexpense', {headers:{"token":token}})
+        .then(response =>  {
+          if(response.status===200) {
+          var a=document.createElement('a');
+          a.href=response.data.fileUrl;
+          a.download= 'myexpense.csv';
+          a.click();
+        } 
+        else if(response.status===500){
+      const p=document.createElement('p');
+      p.appendChild(dovument.ctrateTextNode('not a premium user'));
+      document.querySelector('#notpre').appendChild(p)
+        }
+        else {
+          console.log('could not download the file');
+         
+          throw new Error();
+        
+          
+        }
+      }) .catch(err => 
+      {
+        console.log("response received")
+        console.log(err);
+      })
+    }
+    
+  
 
-async function downloadexpense(){
-try{
-const response=await axios.get('http://localhost:3000/downloadexpense',{headers:{"token":token}});
-if(response.status===200)
-{
-var a=document.createElement('a');
-a.href=response.data.fileUrl;
-a.download= 'myexpense.csv';
-a.click();
-}
-else
-{
-  console.log('could not download the file');
-  throw new Error();
-}
-}
-catch(err)
-{
-
-  console.log("getting error in downloadexpense",err);
-}
-
-}
+  
+  
 
 
 

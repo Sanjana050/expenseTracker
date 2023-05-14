@@ -1,9 +1,9 @@
 const User=require('../models/user');
 const Expense=require('../models/expense');
 
-const Sequelize=require('sequelize');
-const sequelize=require('../util/database');
 
+const fs=require('fs');
+const AWS=require('aws-sdk')
 
 exports.showLeaderBoard= async(req,res,next)=>{
 try{
@@ -81,3 +81,71 @@ catch(err){
 console.log(err);
 }
 }
+
+ function uploadToS3(data,fileName){
+  const BUCKET_NAME='expensetrackerapp5';
+  const IAM_USER_KEY='AKIAS2QFH63ORT4UBLEI';
+  const IAM_USER_SECRET='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';
+  
+let s3bucket=new AWS.S3({
+  accessKeyId:IAM_USER_KEY,
+  secretAccessKey:IAM_USER_SECRET,
+  
+})
+
+var params={
+  Bucket:BUCKET_NAME,
+  Key:`${fileName}`,
+  Body:data,
+  ACL:'public-read'
+}
+return new Promise((resolve,reject)=>{
+  s3bucket.upload(params,(err,s3response)=>{
+    if(err)
+    {
+      console.log("NJjjdnw",err);
+      reject(err);
+    }
+    else{
+      console.log('success',s3response)
+      resolve(s3response.Location);
+      }
+  });
+  
+})
+ 
+
+}
+exports.downloadExpense=async(req,res,next)=>{
+  try{
+  if(req.user.isPremiumUser===false)
+  {
+    res.status(500).json({"message":"not a premium user"});
+  }
+  console.log("NeHA",req.user);
+  
+  const expenses=await Expense.findAll({where:{userId:req.user.id}})
+  
+    
+  console.log(expenses);
+  const stringexpense=JSON.stringify(expenses);
+  const userId=req.user.id;
+  const fileName=`Expense${userId}/${new Date()}.txt`;
+  const fileUrl=await uploadToS3(stringexpense,fileName);
+  res.status(200).json({fileUrl,'success':true})
+}
+catch(err){
+  console.log(err);
+  res.status(500).json({fileUrl:'',success:false,'err':err})
+}
+
+    
+   
+
+}
+
+    
+ 
+  
+
+

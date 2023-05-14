@@ -1,9 +1,9 @@
 const Sib = require('sib-api-v3-sdk');
 require('dotenv').config();
 const bcrypt=require('bcrypt');
-const salt=100;
+const saltRounds=100;
 
-const API_K = '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';
+const API_K = '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';
 const User=require('../models/user')
 const forgotPass=require('../models/forgotpass')
 
@@ -81,8 +81,9 @@ exports.resetPassword=async (req,res,next)=>{
   const user=await forgotPass.findOne({where:{id:id}});
   if(user)
   {
+    
 res.status(200).send(`<html>
-<form action="/updatePass/${id}' method="GET">
+<form action='/updatePass/${id}' method="GET">
 <label for="newPass">Enter your new Password
 <input type="password" name="newPass" id="newPass" required>
 <button type="submit">Reset Password</button>
@@ -93,41 +94,49 @@ res.status(200).send(`<html>
       res.status(200).json({"message":"no request send for resetting password"})
   }
 }
+exports.updatePass = async (req, res, next) => {
+  try {
+    console.log('in updatePass');
+    const pass = req.query.newPass;
+    let id = req.params.id;
 
-exports.updatePass=async (req,res,next)=>{
-  try{
-    console.log('in updatePass')
-  const pass=req.query.newPass;
-  
+    console.log(id, "id in update");
+    console.log(pass, id, "NEHAAAA in updatePsass");
 
-  const id=req.params.id;
-  console.log(pass,id,"NEHAAAA in updatePsass")
-  const user=await User.findOne({where:{id:id}});
-  if(user)
-  {
-  
-  bcrypt.hash(newpassword, salt, function(err, hash) {
-    // Store hash in your password DB.
-    if(err){
-        console.log(err);
-        throw new Error(err);
-    }
-    user.update({ password: hash }).then(() => {
-        res.status(201).json({message: 'Successfuly update the new password'})
-    })
-});
+    id = req.params.id.replace(/\\+$/, '');
+    let userId;
+    const forPass = await forgotPass.findOne({ where: { id: id } });
+    userId = forPass.userId;
+
+    console.log(userId, "forPass");
+    const user = await User.findOne({ where: { id: userId } });
+    console.log("NEHAAA user", user);
+
+    if (user) {
+      const saltRounds = 10;
+      bcrypt.genSalt(saltRounds, function(err, salt) {
+          if(err){
+              console.log(err);
+              throw new Error(err);
+          }
+          bcrypt.hash(pass, salt, function(err, hash) {
+              // Store hash in your password DB.
+              if(err){
+                  console.log(err);
+                  throw new Error(err);
+              }
+              user.update({ password: hash }).then(() => {
+                  res.status(201).json({message: 'Successfuly update the new password'})
+              })
+          });
+      });
+} else{
+  return res.status(404).json({ error: 'No user Exists', success: false})
 }
-else{
-  res.status(500).json({"message":"user not found"})
-}
+
 
   }
-  
-
-
-  catch(err)
-  {
-    console.log(err)
+  catch (err) {
+    console.log(err);
   }
-
 }

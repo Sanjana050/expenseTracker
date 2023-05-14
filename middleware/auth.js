@@ -32,6 +32,7 @@ User.findByPk(user.userId).then((user)=>{
     console.log(req.user.dataValues.email,"email now")
      next();
 }).catch((err)=>{
+    console.log(err);
     throw new Error(err)
 })
     }

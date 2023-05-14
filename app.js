@@ -5,8 +5,12 @@ const cors = require('cors');
 const Order=require('./models/orders')
 const Forgotpass=require('./models/forgotpass')
 const bodyParser=require('body-parser');
+const helmet=require('helmet')
+const compression=require('compression')
 app.use(bodyParser.urlencoded({extended:false}));
- app.use(express.json());
+app.use(express.json());
+const morgan=require('morgan');
+const fs=require('fs')
 
 const path=require('path')
 
@@ -25,7 +29,7 @@ const expenseRoute=require('./router/expense');
 const userRoute=require('./router/user');
 const premiumRoute=require('./router/premium')
 const forgotPassRouter=require('./router/password');
-const { forgotpassword } = require('./controllers/password');
+
 
 app.use(express.static(path.join(__dirname,'views')))
 
@@ -33,10 +37,12 @@ app.use(forgotPassRouter);
 app.use(premiumRoute);
 app.use(expenseRoute);
 app.use(userRoute);
+app.use(helmet());
+app.use(compression);
 
+const accessLogStream=fs.createWriteStream(path.join(__dirname,'accessLogs'),{'flags':'a'})
 
-
-
+app.use(morgan('combined',{'stream':accessLogStream}));
 
 
 User.hasMany(Expense);
